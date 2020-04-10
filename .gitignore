@@ -1,0 +1,8 @@
+.env/
+.vscode/
+db.sqlite3
+pinger/__pycache__/
+collector/__pycache__/
+collector/migrations/
+api/__pycache__/
+api/migrations/
