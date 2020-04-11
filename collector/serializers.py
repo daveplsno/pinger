@@ -2,14 +2,14 @@ from django.contrib.auth.models import User, Group
 from rest_framework import serializers
 from .models import icmp_results, targets
 
-class IcmpResultsSerializer(serializers.HyperlinkedModelSerializer):
+class IcmpResultsSerializer(serializers.ModelSerializer):
     class Meta:
         model = icmp_results
-        fields = ('name', 'target', 'size', 'count', 'created', 'min_rtt', 'max_rtt', 'avg_rtt', 'success', 'packet_success', 'packet_fail', 'loss_percentage')
+        fields = "__all__"
 
-class TargetsSerializer(serializers.HyperlinkedModelSerializer):
-    name = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
-
+class TargetsSerializer(serializers.ModelSerializer):
     class Meta:
         model = targets
-        fields = ('name', 'icmp', 'dns', 'target', 'icmp_size', 'icmp_count')
+        #fields = "__all__"
+        #fields = ['name', 'address']
+        fields = ['name', 'address', 'icmp_size', 'icmp_count', 'icmp_interval']

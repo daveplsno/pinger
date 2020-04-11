@@ -190,3 +190,101 @@ if __name__ == '__main__':
     #print (targets)
     finish = time.perf_counter()
     print(f'Finished in {round(finish-start, 2)} second(s)')
+
+
+#targets = {
+#  "benedict": {
+#    "target": "Benedict.blender.net",
+#    "size": 500,
+#    "count": 5,
+#    "interval": 1
+#  },
+#  "brent": {
+#    "target": "alucarddelta.duckdns.org",
+#    "size": 500,
+#    "count": 5,
+#    "interval": 1
+#  },
+#}
+
+#targets = {
+#  "benedict": {
+#    "target": "Benedict.blender.net",
+#    "size": 500,
+#    "count": 5,
+#    "interval": 1
+#  },
+#  "davidpoyner": {
+#    "target": "davidpoyner.com",
+#    "size": 500,
+#    "count": 5,
+#    "interval": 1
+#  },
+#  "sam": {
+#    "target": "10.2.1.3",
+#    "size": 500,
+#    "count": 5,
+#    "interval": 1
+#  },
+#  "gateway": {
+#    "target": "10.2.1.1",
+#    "size": 500,
+#    "count": 5,
+#    "interval": 1
+#  },
+#  "samfqdn": {
+#    "target": "sam.blender.net",
+#    "size": 500,
+#    "count": 5,
+#    "interval": 1
+#  },
+#  "brent": {
+#    "target": "alucarddelta.duckdns.org",
+#    "size": 500,
+#    "count": 5,
+#    "interval": 1
+#  },
+#  "josh": {
+#    "target": "joshsname.duckdns.org",
+#    "size": 500,
+#    "count": 5,
+#    "interval": 1
+#  },
+#  "google": {
+#    "target": "8.8.8.8",
+#    "size": 500,
+#    "count": 5,
+#    "interval": 1
+#  },
+#  "google2": {
+#    "target": "8.8.4.4",
+#    "size": 500,
+#    "count": 5,
+#    "interval": 1
+#  },
+#  "cf": {
+#    "target": "1.1.1.1",
+#    "size": 500,
+#    "count": 5,
+#    "interval": 1
+#  },
+#  "cf2": {
+#    "target": "1.0.0.1",
+#    "size": 500,
+#    "count": 5,
+#    "interval": 1
+#  },
+#}
+
+
+
+    except:
+        targetdict[hostname]['data']['created'] = x.strftime('%d/%m/%Y %H:%M:%S')
+        targetdict[hostname]['data']['packetloss'] = 100
+        targetdict[hostname]['data']['received'] = 0
+        targetdict[hostname]['data']['rtt_avg'] = 0
+        targetdict[hostname]['data']['rtt_max'] = 0
+        targetdict[hostname]['data']['rtt_mdev'] = 0
+        targetdict[hostname]['data']['rtt_min'] = 0
+        targetdict[hostname]['data']['transmitted'] = 0
+        targetdict[hostname]['data']['success'] = False

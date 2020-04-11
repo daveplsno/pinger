@@ -3,15 +3,15 @@ from django.db import models
 from django.utils import timezone
 
 class targets(models.Model):
-    name = models.CharField(primary_key=True, max_length=255, blank=False)
-    icmp = models.BooleanField(default=False)
-    dns = models.BooleanField(default=False)
-    created = models.DateTimeField(default=timezone.now)
-    modified = models.DateTimeField(default=timezone.now)
-    target = models.CharField(max_length=255, blank=False, null=True)
-    icmp_size = models.CharField(max_length=255, blank=False, null=True,default=500)
-    icmp_interval = models.CharField(max_length=255, blank=False, null=True, default=1)
-    icmp_count = models.CharField(max_length=255, blank=False, null=True, default=10)
+    name = models.CharField(primary_key = True, max_length = 255)
+    icmp = models.BooleanField(default = False)
+    dns = models.BooleanField(default = False)
+    created = models.DateTimeField(default = timezone.now)
+    modified = models.DateTimeField(default = timezone.now)
+    address = models.CharField(null=True, max_length = 255)
+    icmp_size = models.IntegerField(null=True, default = 500)
+    icmp_interval = models.IntegerField(null=True, default=1)
+    icmp_count = models.IntegerField(null=True, default=5)
 
     class Meta:
         verbose_name_plural = "targets"
@@ -21,17 +21,19 @@ class targets(models.Model):
 
 class icmp_results(models.Model):
     name = models.CharField(max_length=255, blank=False)
-    target = models.CharField(max_length=255, blank=True)
-    size = models.CharField(max_length=255, blank=True)
-    count = models.CharField(max_length=255, blank=True)
+    address = models.CharField(max_length=255, blank=True)
+    icmp_size = models.IntegerField(null=True, default = 0)
+    icmp_interval = models.IntegerField(null=True, default = 0)
+    icmp_count = models.IntegerField(null=True, default = 0)
     created = models.DateTimeField(default=timezone.now)
-    min_rtt = models.CharField(max_length=255, default=0)
-    max_rtt = models.CharField(max_length=255, default=0)
-    avg_rtt = models.CharField(max_length=255, default=0)
+    rtt_avg = models.IntegerField(default=0)
+    rtt_max = models.IntegerField(default=0)
+    rtt_mdev = models.IntegerField(default=0)
+    rtt_min = models.IntegerField(default=0)
+    packetloss = models.IntegerField(default=0)
+    received = models.IntegerField(default=0)
+    transmitted = models.IntegerField(default=0)
     success = models.BooleanField(default=False)
-    packet_success = models.CharField(max_length=255, default=0)
-    packet_fail = models.CharField(max_length=255, default=0)
-    loss_percentage = models.CharField(max_length=255, default=0)
 
     class Meta:
         verbose_name_plural = "icmp_results"

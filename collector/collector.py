@@ -2,140 +2,116 @@
 import textfsm
 import subprocess
 import pprint
-import time
+import time, datetime
 import concurrent.futures
+import requests
+import sqlite3
 
-targets = {
-  "benedict": {
-    "target": "Benedict.blender.net",
-    "size": 500,
-    "count": 5,
-    "interval": 1
-  },
-  "brent": {
-    "target": "alucarddelta.duckdns.org",
-    "size": 500,
-    "count": 5,
-    "interval": 1
-  },
-}
-
-#targets = {
-#  "benedict": {
-#    "target": "Benedict.blender.net",
-#    "size": 500,
-#    "count": 5,
-#    "interval": 1
-#  },
-#  "davidpoyner": {
-#    "target": "davidpoyner.com",
-#    "size": 500,
-#    "count": 5,
-#    "interval": 1
-#  },
-#  "sam": {
-#    "target": "10.2.1.3",
-#    "size": 500,
-#    "count": 5,
-#    "interval": 1
-#  },
-#  "gateway": {
-#    "target": "10.2.1.1",
-#    "size": 500,
-#    "count": 5,
-#    "interval": 1
-#  },
-#  "samfqdn": {
-#    "target": "sam.blender.net",
-#    "size": 500,
-#    "count": 5,
-#    "interval": 1
-#  },
-#  "brent": {
-#    "target": "alucarddelta.duckdns.org",
-#    "size": 500,
-#    "count": 5,
-#    "interval": 1
-#  },
-#  "josh": {
-#    "target": "joshsname.duckdns.org",
-#    "size": 500,
-#    "count": 5,
-#    "interval": 1
-#  },
-#  "google": {
-#    "target": "8.8.8.8",
-#    "size": 500,
-#    "count": 5,
-#    "interval": 1
-#  },
-#  "google2": {
-#    "target": "8.8.4.4",
-#    "size": 500,
-#    "count": 5,
-#    "interval": 1
-#  },
-#  "cf": {
-#    "target": "1.1.1.1",
-#    "size": 500,
-#    "count": 5,
-#    "interval": 1
-#  },
-#  "cf2": {
-#    "target": "1.0.0.1",
-#    "size": 500,
-#    "count": 5,
-#    "interval": 1
-#  },
-#}
+def loadtargets():
+    targets = requests.get("http://localhost:10000/targets.json")
+    targetdict = {x['name']: x for x in targets.json()}
+    return targetdict
 
 def collector(hostname):
+    x = datetime.datetime.utcnow()
+    targetdict[hostname]['data'] = {}
+    targetdict[hostname]['data']['created'] = x.strftime('%d/%m/%Y %H:%M:%S')
     p = subprocess.Popen(["ping", "-q",
-                        "-c", str(targets[hostname]['count']), 
-                        "-W", str(targets[hostname]['interval']), 
-                        targets[hostname]['target']
+                        "-c", str(targetdict[hostname]['icmp_count']), 
+                        "-W", str(targetdict[hostname]['icmp_interval']),
+                        "-s", str(targetdict[hostname]['icmp_size']),
+                        targetdict[hostname]['address']
                     ],
                      stdout=subprocess.PIPE,
                      stderr=subprocess.PIPE)
     ping_reply, ping_errors = p.communicate()
     encoding = 'utf-8'
     ping_reply_s = str(ping_reply, encoding)
+    if ping_reply != None:
+        targetdict[hostname]['data']['success'] = False
+        targetdict[hostname]['data']['packetloss'] = 100
+        targetdict[hostname]['data']['received'] = 0
+        targetdict[hostname]['data']['rtt_avg'] = 0
+        targetdict[hostname]['data']['rtt_max'] = 0
+        targetdict[hostname]['data']['rtt_mdev'] = 0
+        targetdict[hostname]['data']['rtt_min'] = 0
+        targetdict[hostname]['data']['transmitted'] = 0
+    else:
+        targetdict[hostname]['data']['success'] = True
     return ping_reply_s
 
 def parse_results(template, result, hostname):
+    x = datetime.datetime.utcnow()
     template = textfsm.TextFSM(template)
     parsed_results = template.ParseText(result)
     data = [dict(zip(template.header, pr)) for pr in parsed_results]
-    targets[hostname]['data'] = data[0]
+    targetdict[hostname]['data'] = data[0]
+    targetdict[hostname]['data']['created'] = x.strftime('%d/%m/%Y %H:%M:%S')
+    targetdict[hostname]['data']['success'] = True
 
-def SlowWorker():
-    start = time.perf_counter()
-    pingtemplate = open("ping.tsmtemplate")
-    hosts = targets.keys()
-    for x in hosts:
-        print (f"started working on {x}")
-        ping_results = collector (x)
-        parse_results(pingtemplate, ping_results, x)
-        print (f"finished working on {x}")
-    pprint.pprint(targets)
-    finish = time.perf_counter()
-
-def FastWorker(hostname):
+def Worker(hostname):
     pingtemplate = open("ping.tsmtemplate")
     print (f"started working on {hostname}")
     ping_results = collector (hostname)
     parse_results(pingtemplate, ping_results, hostname)
     print (f"finished working on {hostname}")
 
-def FastWorkerThreads():
-    hosts = list(targets.keys())
-    with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
-        executor.map(FastWorker, hosts)
+def WorkerThreads():
+    hosts = list(targetdict.keys())
+    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+        executor.map(Worker, hosts)
+
+def update_db():
+    conn = sqlite3.connect('../db.sqlite3')
+    c = conn.cursor()
+    for k, v in targetdict.items():
+        c.execute(
+            '''
+            INSERT OR REPLACE into collector_icmp_results (
+              name, 
+              address,
+              created,
+              icmp_count,
+              icmp_interval,
+              icmp_size,
+              packetloss,
+              received,
+              rtt_avg, 
+              rtt_max, 
+              rtt_mdev,
+              rtt_min, 
+              transmitted,
+              success
+            )
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ''',
+            (
+            k,
+            v['address'],
+            v['data']['created'],
+            v['icmp_count'],
+            v['icmp_interval'],
+            v['icmp_size'],
+            v['data']['packetloss'],
+            v['data']['received'],
+            v['data']['rtt_avg'],
+            v['data']['rtt_max'],
+            v['data']['rtt_mdev'],
+            v['data']['rtt_min'],
+            v['data']['transmitted'],
+            v['data']['success']
+            )
+        )
+        conn.commit()
+    conn.close()
+
 
 if __name__ == "__main__":
     start = time.perf_counter()
-    #SlowWorker()
-    FastWorkerThreads()
+    targetdict = loadtargets()
+    WorkerThreads()
+    update_db()
+    pprint.pprint(targetdict)
     finish = time.perf_counter()
     print(f'Finished in {round(finish-start, 2)} second(s)')
-    pprint.pprint(targets)
+    
