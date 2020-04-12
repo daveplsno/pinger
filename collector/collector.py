@@ -9,6 +9,8 @@ import requests
 import sqlite3
 from pathlib import Path
 
+path = Path(__file__).resolve().parent
+
 def LoadTargets():
     try:
         targets = requests.get("http://localhost:10000/targets.json")
@@ -63,7 +65,7 @@ def PingWorker(hostname):
     print (f"started working on {hostname}")
     PingPrefill(hostname)
     ping_results = collector(hostname)
-    pingtemplate = open("ping.tsmtemplate")
+    pingtemplate = open(str(path) + "/ping.tsmtemplate")
     parse_results(pingtemplate, ping_results, hostname)
     print (f"finished working on {hostname}")
 
@@ -73,7 +75,7 @@ def WorkerThreads():
         executor.map(PingWorker, hosts)
 
 def update_db():
-    db = "../db.sqlite3"
+    db = (str(path) + "/../db.sqlite3")
     conn = sqlite3.connect(db)
     c = conn.cursor()
     for k, v in targetdict.items():
@@ -98,7 +100,6 @@ def update_db():
         )
         conn.commit()
     conn.close()
-
 
 if __name__ == "__main__":
     #start = time.perf_counter()
