@@ -25,7 +25,7 @@ SECRET_KEY = 'v2t^eil5bw(a)unt4r^89i2nnl5_rloc4dkn3&6r%9dm9sa(a*'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['pop-os', 'localhost']
+ALLOWED_HOSTS = ['pop-os', 'localhost', 'pinger.davidpoyner.com']
 
 
 # Application definition
@@ -115,7 +115,7 @@ USE_L10N = False
 
 USE_TZ = True
 
-DATETIME_FORMAT = '%d/%m/%Y %H:%M:%S'
+#DATETIME_FORMAT = '%Y/%m/%d %H:%M:%S'
 
 
 # Static files (CSS, JavaScript, Images)
@@ -127,7 +127,7 @@ REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
     # or allow read-only access for unauthenticated users.
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    #'PAGE_SIZE': 10,
+    'PAGE_SIZE': 5000,
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
     ]

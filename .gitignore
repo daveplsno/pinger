@@ -6,3 +6,4 @@ collector/__pycache__/
 collector/migrations/
 api/__pycache__/
 api/migrations/
+nohup.out

@@ -23,9 +23,9 @@ class GroupViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
 class IcmpResultsViewSet(viewsets.ModelViewSet):
-    queryset = icmp_results.objects.all().order_by('name')
+    queryset = icmp_results.objects.all().order_by('-id')
     serializer_class = IcmpResultsSerializer
 
 class TargetsViewSet(viewsets.ModelViewSet):
-    queryset = targets.objects.all().order_by('name')
+    queryset = targets.objects.all()
     serializer_class = TargetsSerializer

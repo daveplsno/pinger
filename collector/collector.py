@@ -15,7 +15,8 @@ def LoadTargets():
     try:
         targets = requests.get("http://localhost:10000/targets.json")
         if targets != None:
-            targetdict = {x['name']: x for x in targets.json()}
+            json = targets.json()
+            targetdict = {x['name']: x for x in json['results']}
         return targetdict
     except:
         targetdict = {}
@@ -25,7 +26,7 @@ def PingPrefill(hostname):
     x = datetime.datetime.utcnow()
     targetdict[hostname]['data'] = {}
     targetdict[hostname]['data']['success'] = False
-    targetdict[hostname]['data']['created'] = x.strftime('%d/%m/%Y %H:%M:%S')
+    targetdict[hostname]['data']['created'] = x.strftime('%Y-%m-%d %H:%M:%S')
     targetdict[hostname]['data']['packetloss'] = 100
     targetdict[hostname]['data']['received'] = 0
     targetdict[hostname]['data']['rtt_avg'] = 0
@@ -58,7 +59,7 @@ def parse_results(template, result, hostname):
         parsed_results = template.ParseText(result)
         data = [dict(zip(template.header, pr)) for pr in parsed_results]
         targetdict[hostname]['data'] = data[0]
-        targetdict[hostname]['data']['created'] = x.strftime('%d/%m/%Y %H:%M:%S')
+        targetdict[hostname]['data']['created'] = x.strftime('%Y-%m-%d %H:%M:%S')
         targetdict[hostname]['data']['success'] = True
 
 def PingWorker(hostname):
@@ -82,7 +83,7 @@ def update_db():
         c.execute(
             '''
             INSERT OR REPLACE into collector_icmp_results (
-              name, address, created, 
+              name, address, created,
               icmp_count, icmp_interval, icmp_size, 
               packetloss, received, rtt_avg, 
               rtt_max, rtt_mdev, rtt_min, 
@@ -91,7 +92,7 @@ def update_db():
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             ''',
             (
-            k, v['address'], v['data']['created'], 
+            k, v['address'], v['data']['created'],
             v['icmp_count'], v['icmp_interval'], v['icmp_size'], 
             v['data']['packetloss'], v['data']['received'],  v['data']['rtt_avg'],
             v['data']['rtt_max'], v['data']['rtt_mdev'], v['data']['rtt_min'],

@@ -6,6 +6,7 @@ django-unixtimestampfield==0.4.0
 djangorestframework==3.11.0
 future==0.18.2
 idna==2.9
+mysql-connector-python==8.0.19
 pkg-resources==0.0.0
 pythonping==1.0.9
 pytz==2019.3
