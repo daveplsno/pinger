@@ -7,3 +7,4 @@ collector/migrations/
 api/__pycache__/
 api/migrations/
 nohup.out
+collector/idk.csv

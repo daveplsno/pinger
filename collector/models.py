@@ -26,14 +26,19 @@ class icmp_results(models.Model):
     icmp_interval = models.IntegerField(null=True, default = 0)
     icmp_count = models.IntegerField(null=True, default = 0)
     created = models.DateTimeField(default = timezone.now)
-    rtt_avg = models.DecimalField(default=0, decimal_places=3, max_digits=10)
-    rtt_max = models.DecimalField(default=0, decimal_places=3, max_digits=10)
-    rtt_mdev = models.DecimalField(default=0, decimal_places=3, max_digits=10)
-    rtt_min = models.DecimalField(default=0, decimal_places=3, max_digits=10)
+    #rtt_avg = models.DecimalField(default=0, decimal_places=3, max_digits=10)
+    #rtt_max = models.DecimalField(default=0, decimal_places=3, max_digits=10)
+    #rtt_mdev = models.DecimalField(default=0, decimal_places=3, max_digits=10)
+    #rtt_min = models.DecimalField(default=0, decimal_places=3, max_digits=10)
+    rtt_avg = models.CharField(null=True, max_length = 255)
+    rtt_max = models.CharField(null=True, max_length = 255)
+    rtt_mdev = models.CharField(null=True, max_length = 255)
+    rtt_min = models.CharField(null=True, max_length = 255)
     packetloss = models.IntegerField(default=0)
     received = models.IntegerField(default=0)
     transmitted = models.IntegerField(default=0)
     success = models.BooleanField(default=False)
+    results = models.CharField(null=True, max_length=1000)
 
     class Meta:
         verbose_name_plural = "icmp_results"
