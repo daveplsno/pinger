@@ -1,14 +1,7 @@
-pingerspingerspingerspingers
+pinger
 
-```
-python3 -m venv .env
-source .env/bin/activate
-pip install -r requirements.txt
-```
-
-```
-python manage.py runserver 0.0.0.0:10000
-python manage.py createsuperuser --user blender
-python manage.py makemigrations
-python manage.py migrate
-```
+it pings
+at the moment it does not do much else
+eventually it might ping and graph
+time will tell
+much work to be done
