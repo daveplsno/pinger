@@ -1,0 +1,14 @@
+Value transmitted (\d+)
+Value received (\d+)
+Value packetloss (\d+)
+Value rtt_min (\d+.\d+)
+Value rtt_avg (\d+.\d+)
+Value rtt_max (\d+.\d+)
+#Value rtt_mdev (\d+.\d+)
+
+Start
+  ^${transmitted} packets transmitted, ${received} packets received, ${packetloss}% packet loss
+  ^.* ${rtt_min}/${rtt_avg}/${rtt_max}
+
+
+#^.* ${rtt_min}/${rtt_avg}/${rtt_max}/${rtt_mdev}
