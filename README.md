@@ -1,12 +1,8 @@
-pinger
+# pinger
 
-it pings
+it pings, it records, it doens't do anything else
 
-it records
-
-but at the moment it does not do much else
-
-eventually it might ping and graph
+eventually it might also graph
 
 time will tell
 
