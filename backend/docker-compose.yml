@@ -1,0 +1,9 @@
+version: "3"
+services:
+
+  pinger:
+    restart: unless-stopped
+    image: daveplsno/pinger:0.1
+    container_name: pinger
+    environment:
+      PINGERTOKEN: ${PINGERTOKEN}

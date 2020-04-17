@@ -7,7 +7,7 @@ class IcmpResultsSerializer(serializers.ModelSerializer):
     class Meta:
         model = icmp_results
         #fields = "__all__"
-        fields = ['created', 'name', 'address', 'success', 'rtt_min', 'rtt_avg', 'rtt_max', 'rtt_mdev', 'packetloss', 'address']
+        fields = ['created', 'name', 'address', 'success', 'rtt_min', 'rtt_avg', 'rtt_max', 'packetloss', 'transmitted', 'received', 'username']
 
 
 class TargetsSerializer(serializers.ModelSerializer):

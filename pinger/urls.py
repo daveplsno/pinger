@@ -17,18 +17,25 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth.models import User, Group
 from rest_framework import routers, serializers, viewsets
+from rest_framework.authtoken import views as whatever
 from collector import views
 from api import views
+from django.views.static import serve 
+
 
 router = routers.DefaultRouter()
 router.register(r'users', views.UserViewSet)
 router.register(r'groups', views.GroupViewSet)
 router.register(r'icmp_results', views.IcmpResultsViewSet)
 router.register(r'targets', views.TargetsViewSet)
+router.register(r'user-id', views.UserIdViewSet, 'idk')
+
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    #path('api/', include(router.urls))
-    path('', include(router.urls)),
+    path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    #path('api-token-auth/', whatever.obtain_auth_token, name='api-tokn-auth'),
+    #path('api-token-auth/', whatever.obtain_auth_token),
 ]
