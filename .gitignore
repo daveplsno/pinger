@@ -4,6 +4,7 @@ pinger_client/.env
 pinger_server/.env
 pinger_server/data/pinger_server/.env
 pinger_server/db/*
+tests and or rubbish bin/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
