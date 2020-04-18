@@ -4,6 +4,7 @@ services:
   db:
     image: mariadb
     restart: always
+    container_name: pinger_server_db
     environment:
       - MYSQL_DATABASE=${MYSQL_DATABASE}
       - MYSQL_USER=${MYSQL_USER}
@@ -14,6 +15,7 @@ services:
   adminer:
     image: adminer
     restart: always
+    container_name: adminer
     ports:
       - 8085:8080
   pinger_server:
