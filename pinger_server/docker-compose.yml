@@ -1,0 +1,30 @@
+version: "3.5"
+
+services:
+  db:
+    image: mariadb
+    restart: always
+    environment:
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+    volumes:
+      - ./db:/var/lib/mysql
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8085:8080
+  pinger_server:
+    restart: always
+    container_name: pinger_server
+    image: daveplsno/pinger_server:devel
+    build: .
+    command: python manage.py runserver 0.0.0.0:10000
+    volumes:
+      - ./data:/code
+    ports:
+      - "10000:10000"
+    depends_on:
+      - db

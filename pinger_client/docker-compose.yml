@@ -1,0 +1,10 @@
+version: "3.5"
+services:
+
+  pinger_client:
+    build: .
+    restart: unless-stopped
+    image: daveplsno/pinger_client:devel
+    container_name: pinger_client
+    environment:
+      PINGERTOKEN: ${PINGERTOKEN}
