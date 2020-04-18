@@ -3,14 +3,7 @@
 pinger_client/.env
 pinger_server/.env
 pinger_server/data/pinger_server/.env
-pinger_server/db/aria_log_control
-pinger_server/db/aria_log.00000001
-pinger_server/db/ib_buffer_pool
-pinger_server/db/ib_logfile0
-pinger_server/db/ib_logfile1
-pinger_server/db/ibdata1
-pinger_server/db/ibtmp1
-pinger_server/db/multi-master.info
+pinger_server/db/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
