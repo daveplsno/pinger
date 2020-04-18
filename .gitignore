@@ -11,3 +11,8 @@ pinger_server/db/ib_logfile1
 pinger_server/db/ibdata1
 pinger_server/db/ibtmp1
 pinger_server/db/multi-master.info
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
