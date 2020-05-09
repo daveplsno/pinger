@@ -27,7 +27,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.getenv("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['pop-os', 'pinger.davidpoyner.com']
 
@@ -42,8 +42,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'collector',
+    'api',
     'rest_framework',
     'rest_framework.authtoken',
+
+	#third party package for user registration and authentication endpoints 	
+    'djoser',
+
 ]
 
 MIDDLEWARE = [
@@ -126,7 +131,7 @@ USE_I18N = False
 
 USE_L10N = False
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)

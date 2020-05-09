@@ -1,0 +1,4 @@
+MYSQL_DATABASE=pingerdb
+MYSQL_USER=pinger
+MYSQL_PASSWORD=pingerpw
+MYSQL_ROOT_PASSWORD=rootpw

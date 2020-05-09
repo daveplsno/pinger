@@ -29,10 +29,11 @@ except:
 
 def LoadTargetDict(url, token):
     try:
-        targets = requests.get(url, headers={'Authorization': 'Token {}'.format(token)})
+        targets = requests.get(url, headers={'Authorization': 'Token {}'.format(token)}, timeout=2)
         if targets != None:
             json = targets.json()
             targetdict = {x['name']: x for x in json['results']}
+            print ("Loaded targets")
         return targetdict
     except:
         targetdict = {}
@@ -41,7 +42,7 @@ def LoadTargetDict(url, token):
 
 def LoadUsername(url, token):
     try:
-        username = requests.get(url, headers={'Authorization': 'Token {}'.format(token)})
+        username = requests.get(url, headers={'Authorization': 'Token {}'.format(token)}, timeout=2)
         if username != None:
             json = username.json()
             username = (json['results'][0]['username'])
@@ -164,29 +165,34 @@ def update_db():
             conn.close()
 
 def UpdateAPI():
-    #pprint.pprint (targetdict)
-    stufftopost = {}
-    for k, v in targetdict.items():
-        stufftopost = {
-        "created": v['data']['created'],
-        "name": v['name'],
-        "address": v['address'],
-        "success": v['success'],
-        "rtt_min": v['data']['rtt_min'],
-        "rtt_avg": v['data']['rtt_avg'],
-        "rtt_max": v['data']['rtt_max'],
-        "packetloss": v['data']['packetloss'],
-        "transmitted": v['data']['transmitted'],
-        "received": v['data']['received'],
-        "username": username
-        }
-        requests.post('https://pinger.davidpoyner.com/api/icmp_results/', headers={
-                'Authorization': 'Token {}'.format(token),
-                'Content-type': 'application/json',
-                },
-            json = stufftopost
-        )
-    print ("Updated API")
+    try:
+        #pprint.pprint (targetdict)
+        stufftopost = {}
+        for k, v in targetdict.items():
+            stufftopost = {
+            "created": v['data']['created'],
+            "name": v['name'],
+            "address": v['address'],
+            "success": v['success'],
+            "rtt_min": v['data']['rtt_min'],
+            "rtt_avg": v['data']['rtt_avg'],
+            "rtt_max": v['data']['rtt_max'],
+            "packetloss": v['data']['packetloss'],
+            "transmitted": v['data']['transmitted'],
+            "received": v['data']['received'],
+            "username": username
+            }
+            r = requests.post('https://pinger.davidpoyner.com/api/icmp_results/', headers={
+                    'Authorization': 'Token {}'.format(token),
+                    'Content-type': 'application/json',
+                    },
+                json = stufftopost,
+                timeout=2
+            )
+            r.close()
+        print ("Updated API")
+    except:
+        print ("Failed to update the API")
 
 if __name__ == "__main__":
     while True:
