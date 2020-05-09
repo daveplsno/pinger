@@ -1,0 +1,4 @@
+SECRET_KEY='secretkey'
+DBNAME=pingerdb
+DBUSER=pinger
+DBPASS=pingerpw

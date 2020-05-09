@@ -1,4 +1,4 @@
-version: "3.5"
+version: "3"
 
 services:
   db:
@@ -28,5 +28,15 @@ services:
       - ./data:/code
     ports:
       - "10000:10000"
+    depends_on:
+      - db
+  grafana:
+    restart: always
+    container_name: grafana
+    image: grafana/grafana:latest
+    volumes:
+      - ../grafana/data:/data
+    ports:
+      - "3001:3000"
     depends_on:
       - db
