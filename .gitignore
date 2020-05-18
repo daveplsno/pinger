@@ -1,22 +1,15 @@
 .env/
 .vscode/
 pinger_client/.env
-pinger_server/.env
-pinger_server/data/pinger_server/.env
-pinger_server/db/*
+pinger_backend/.env
+pinger_backend/data/pinger_server/.env
+pinger_backend/db/*
 tests and or rubbish bin/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
-pinger_server/data/api/migrations/0001_initial.py
-pinger_server/data/api/migrations/0002_auto_20200425_1256.py
-pinger_server/data/api/migrations/0003_auto_20200425_1302.py
-pinger_server/data/api/migrations/0004_auto_20200425_1305.py
-pinger_server/data/api/migrations/0005_auto_20200425_1328.py
-pinger_server/data/api/migrations/0006_auto_20200425_1400.py
-pinger_server/data/api/migrations/0007_auto_20200425_1415.py
-pinger_server/data/api/migrations/0008_auto_20200425_1417.py
-pinger_server/data/collector/migrations/0003_auto_20200509_1155.py
-pinger_server/data/collector/migrations/0004_auto_20200509_1204.py
+pinger_backend/data/api/migrations/*
+pinger_backend/data/collector/migrations/*
+grafana/data/grafana.db

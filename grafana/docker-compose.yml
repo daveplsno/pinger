@@ -1,0 +1,19 @@
+version: "3.8"
+
+services:
+
+  grafana:
+    restart: always
+    container_name: grafana
+    image: grafana/grafana:latest
+    volumes:
+      - ./data:/var/lib/grafana
+    ports:
+      - "3001:3000"
+    user: "1000"
+    networks:
+      - pinger_backend
+
+networks:
+  pinger_backend:
+    name: pinger_backend
