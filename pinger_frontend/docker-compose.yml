@@ -1,9 +1,9 @@
-version: "3.5"
+version: "3.8"
 
 services:
-  pong:
+  pinger_frontend:
     restart: always
-    container_name: pong
+    container_name: pinger_frontend
     image: node:lts-slim
     #build: .
     working_dir: /app/pong
@@ -12,5 +12,5 @@ services:
       - ./data:/app
     ports:
       - "3000:3000"
-      - "5000:5000"
+      #- "5000:5000"
     stdin_open: true

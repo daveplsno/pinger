@@ -1,4 +1,4 @@
-version: "3"
+version: "3.8"
 
 services:
   db:
@@ -12,12 +12,16 @@ services:
       - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     volumes:
       - ./db:/var/lib/mysql
+    networks:
+      - pinger_backend
   adminer:
     image: adminer
     restart: always
     container_name: adminer
     ports:
       - 8085:8080
+    networks:
+      - pinger_backend
   pinger_server:
     restart: always
     container_name: pinger_server
@@ -30,13 +34,12 @@ services:
       - "10000:10000"
     depends_on:
       - db
-  grafana:
-    restart: always
-    container_name: grafana
-    image: grafana/grafana:latest
-    volumes:
-      - ../grafana/data:/data
-    ports:
-      - "3001:3000"
-    depends_on:
-      - db
+    networks:
+      - pinger_frontend
+      - pinger_backend
+
+networks:
+  pinger_frontend:
+    name: pinger_frontend
+  pinger_backend:
+    name: pinger_backend
